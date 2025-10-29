@@ -1,158 +1,116 @@
-# 📚 Library Management System (Java)
+📘 Library Management System (Java GUI Project)
+🧾 Overview
 
-A simple and efficient **Library Management System (LMS)** built using **Java** and **MySQL (or SQLite)**.  
-This project helps manage books, members, and book transactions (issue/return) in a library.  
+This Java project is a Library Management System built using Swing GUI and JDBC for database connectivity.
+It allows users to manage books, students, and their book issue/return records efficiently through a simple graphical interface.
 
----
-
-## 🚀 Features
-
-- 🧾 **Book Management** – Add, update, delete, and search for books.  
-- 👥 **Member Management** – Register, update, and manage library members.  
-- 🔄 **Issue & Return** – Track borrowed and returned books.  
-- ⏰ **Due Date & Fine Calculation** – Automatically manage overdue fines.  
-- 🔍 **Search & Filter** – Quickly find books or members using keywords.  
-- 🛡️ **Admin Authentication** – Secure login system for librarians.  
-
----
-
-## 🏗️ Project Structure
-
-LibraryManagementSystem/
-│
+🗂️ Project Structure
+practice.java/
 ├── src/
-│ ├── main/
-│ │ ├── java/
-│ │ │ ├── library/
-│ │ │ │ ├── Main.java
-│ │ │ │ ├── Book.java
-│ │ │ │ ├── Member.java
-│ │ │ │ ├── DatabaseConnection.java
-│ │ │ │ ├── Transaction.java
-│ │ │ │ └── LibraryService.java
-│ │ └── resources/
-│ │ └── library.db (if using SQLite)
-│ │
-│ └── test/
-│ └── library/
-│ └── LibraryTest.java
-│
-├── README.md
-├── LICENSE
-└── pom.xml (if using Maven)
+│   ├── College/
+│   │   ├── Book.java
+│   │   ├── Books.java
+│   │   ├── Library.java
+│   │   ├── Student.java
+│   │   └── Students.java
+│   ├── BookRegistrationForm.java
+│   ├── LibraryGUI.java
+│   ├── StudentBookMappingGUI.java
+│   └── Database.java
+├── .idea/               # IntelliJ project settings
+├── practice.java.iml    # IntelliJ module file
+└── .gitignore
 
-yaml
-Copy code
+🧠 Features
 
----
+Book Management: Add, update, or remove books in the library.
 
-## 🛠️ Technologies Used
+Student Management: Register students with unique IDs.
 
-| Component | Technology |
-|------------|-------------|
-| **Programming Language** | Java (JDK 17 or higher) |
-| **Database** | MySQL / SQLite |
-| **UI (Optional)** | JavaFX / Swing |
-| **Build Tool** | Maven / Gradle |
-| **IDE** | IntelliJ IDEA / Eclipse / NetBeans |
+Book Issue & Return: Map books to students and manage borrowing records.
 
----
+Database Integration: Uses MySQL for persistent storage.
 
-## ⚙️ Installation & Setup
+Graphical Interface: Built using Java Swing and Form Designer (.form files).
 
-### 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/your-username/Library-Management-System.git
-cd Library-Management-System
-2️⃣ Configure the Database
-Option 1 – MySQL
-Create a new database and update your credentials in DatabaseConnection.java:
+⚙️ Technologies Used
 
-java
-Copy code
-private static final String URL = "jdbc:mysql://localhost:3306/library_db";
-private static final String USER = "root";
-private static final String PASSWORD = "your_password";
-Run the following SQL commands:
+Language: Java (JDK 8+)
 
-sql
-Copy code
-CREATE DATABASE library_db;
+GUI Library: Swing
 
+Database: MySQL
+
+IDE: IntelliJ IDEA (recommended)
+
+Connector: MySQL JDBC Driver (mysql_connector_j_9_1_0.xml)
+
+🧩 How to Run
+
+Clone or extract the project:
+
+unzip e01c9711-893b-46d7-ad28-83722dc3e1a4.zip
+
+
+Open the project in IntelliJ IDEA.
+
+Configure the database:
+
+Create a MySQL database (e.g., library_db).
+
+Update credentials in Database.java:
+
+Connection con = DriverManager.getConnection(
+    "jdbc:mysql://localhost:3306/library_db", "username", "password");
+
+
+Run the application:
+
+Execute LibraryGUI.java to start the main interface.
+
+🧑‍💻 Key Classes
+File	Description
+LibraryGUI.java	Main GUI interface for managing library operations.
+BookRegistrationForm.java	Handles book registration.
+StudentBookMappingGUI.java	Maps students to borrowed books.
+Database.java	Manages MySQL database connections and queries.
+College/Book.java	Represents a single book entity.
+College/Student.java	Represents a single student entity.
+💾 Database Schema (Suggested)
 CREATE TABLE books (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  title VARCHAR(100),
-  author VARCHAR(100),
-  available_copies INT
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100),
+    author VARCHAR(100),
+    isbn VARCHAR(50),
+    available BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE members (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(100),
-  email VARCHAR(100)
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    roll_no VARCHAR(50) UNIQUE
 );
 
-CREATE TABLE transactions (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  book_id INT,
-  member_id INT,
-  issue_date DATE,
-  return_date DATE,
-  FOREIGN KEY (book_id) REFERENCES books(id),
-  FOREIGN KEY (member_id) REFERENCES members(id)
+CREATE TABLE book_issue (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    book_id INT,
+    issue_date DATE,
+    return_date DATE,
+    FOREIGN KEY (student_id) REFERENCES students(id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
 );
-Option 2 – SQLite
-If you prefer a file-based DB, the system will create library.db automatically.
 
-3️⃣ Run the Application
-If using Maven:
+🧩 Future Enhancements
 
-bash
-Copy code
-mvn compile
-mvn exec:java -Dexec.mainClass="library.Main"
-Or simply run Main.java from your IDE.
+Add search functionality for books and students.
 
-🧠 Future Improvements
-📊 Generate reports (most borrowed books, active members)
+Include book return reminders.
 
-📬 Email notifications for due dates
+Implement report generation (PDF/Excel).
 
-📱 Mobile app integration
+Improve UI design with JavaFX or modern frameworks.
 
-🔐 Role-based access (Admin, Librarian, Member)
+📜 License
 
-🌐 Cloud database support
-
-🤝 Contributing
-Contributions are welcome! 🎉
-If you’d like to improve the project:
-
-Fork the repository
-
-Create a new branch (feature/your-feature)
-
-Commit your changes
-
-Push to your branch
-
-Submit a pull request
-
-🪪 License
-This project is licensed under the MIT License – see the LICENSE file for details.
-
-👨‍💻 Author
-Your Name
-📧 Email: anweshmohanty20@gmail.com
-🌐 GitHub: AnweshMohanty07
-💼 LinkedIn: not created
-
-⭐ Don’t forget to give this repo a star if you found it useful!
-yaml
-Copy code
-
----
-
-Would you like me to tailor this README for a **JavaFX GUI version** or a **console-based (CLI)** version of the project?  
-That way, I can adjust the setup instructions and screenshots section accordingly.
-
+This project is free for educational use and modification.
